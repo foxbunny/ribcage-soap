@@ -38,6 +38,8 @@ if typeof define isnt 'function' or not define.amd
 define (require) ->
   $ = require 'jquery'
   _ = require 'underscore'
+  require 'jquery.soap'
+  require 'jquery.xml2json'
 
   # ## `baseUrl`
   #
