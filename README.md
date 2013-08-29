@@ -36,6 +36,10 @@ The CoffeeScript sources are located in `src` directory, and are _not_
 installed by volo. If you want to use them instead of JavaScript code, you can
 manually copy them into your project.
 
+For jquery.soap and jquery.xml2json, you will be asked by volo to specify the
+dependency list and exports. The defaults (depend on jQuery and no exports)
+should work fine for Ribcage-SOAP.
+
 ## Documentation
 
 Please see [Ribcage-SOAP wiki](https://github.com/foxbunny/ribcage-soap/wiki)
