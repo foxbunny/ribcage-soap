@@ -370,13 +370,13 @@ define (require) ->
     success = options.success
     options.success = (resp) =>
       return false if not @set @parse(resp, options), options
-      success(model, resp, options) if success
-      model.trigger 'destroy', this, @collection, options
+      success(this, resp, options) if success
+      this.trigger 'destroy', this, @collection, options
 
     # Wrap the error callback
     error = options.error
     options.error = (resp) =>
       error(this, resp, options) if error
-      model.trigger 'error', model, resp, options
+      this.trigger 'error', this, resp, options
 
     @sync 'delete', this, options
