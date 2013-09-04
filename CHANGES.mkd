@@ -1,0 +1,10 @@
+# Ribcage-SOAP changelog
+
+# 0.0.2
+
+# `#destory()` fix
+
+The `#destroy()` method now works correctly (or incorrectly, depending on how
+you look at it), and behaves exactly the same as `#fetch()` except it fires
+'destroy' event instead of 'sync'. The response data is fully parsed as it
+should have been the case initially.
