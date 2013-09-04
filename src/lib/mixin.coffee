@@ -359,7 +359,7 @@ define (require) ->
   parse: (response, options) ->
     @convertResponse response.toJSON().Body, options
 
-  # ## `destroy(options)`
+  # ## `destroy([options])`
   #
   # Rewires `#destroy()` call to behave more like `#fetch()`.
   destroy: (options={}) ->
