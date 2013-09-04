@@ -365,10 +365,18 @@ define (require) ->
   destroy: (options={}) ->
     options = _.clone options  # shallow copy
     options.parse or= true
+
+    # Wrap the success callback
     success = options.success
     options.success = (resp) =>
       return false if not @set @parse(resp, options), options
       success(model, resp, options) if success
       model.trigger 'destroy', this, @collection, options
-    @wrapError(this, options)
+
+    # Wrap the error callback
+    error = options.error
+    options.error = (resp) =>
+      error(this, resp, options) if error
+      model.trigger 'error', model, resp, options
+
     @sync 'delete', this, options
