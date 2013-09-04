@@ -358,3 +358,17 @@ define (require) ->
   # this method.
   parse: (response, options) ->
     @convertResponse response.toJSON().Body, options
+
+  # ## `destroy(options)`
+  #
+  # Rewires `#destroy()` call to behave more like `#fetch()`.
+  destroy: (options={}) ->
+    options = _.clone options  # shallow copy
+    options.parse or= true
+    success = options.success
+    options.success = (resp) =>
+      return false if not @set @parse(resp, options), options
+      success(model, resp, options) if success
+      model.trigger 'destroy', this, @collection, options
+    @wrapError(this, options)
+    @sync 'delete', this, options
