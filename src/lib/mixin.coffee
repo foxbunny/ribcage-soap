@@ -334,6 +334,24 @@ define (require) ->
   convertDeleteResponse: (json) ->
     throw new Error 'convertDeleteResponse method is not implemented'
 
+  # ## `isDeleted(model)`
+  #
+  # Rads the modle properties and returns `true` if the model can be considered
+  # deleted.
+  #
+  # This method is called in a success callback during SOAP request. Because
+  # SOAP is an RPC, a successful AJAX request does not equate successful
+  # deletion of a model. Therefore, this method can be overloaded to check the
+  # model data after deletion.
+  #
+  # You can set metadata that help you determine the status of the model using
+  # the `#convertDeleteResponse()` call.
+  #
+  # Returning `false` from this method will prevent the triggering of 'destroy'
+  # event on the model, and will cause the success callback to not be called.
+  isDeleted: (model) ->
+    return true
+
   # ## convertResponse(json, options)`
   #
   # This gets passed JSON data created in the `#parse()` method. The return
@@ -366,10 +384,12 @@ define (require) ->
     options = _.clone options  # shallow copy
     options.parse or= true
 
+    options.deleted or= @isDeleted
+
     # Wrap the success callback
     success = options.success
     options.success = (resp) =>
-      return false if not @set @parse(resp, options), options
+      return false if not options.deleted @set @parse(resp, options), options
       success(this, resp, options) if success
       this.trigger 'destroy', this, @collection, options
 
