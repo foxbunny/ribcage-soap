@@ -1,8 +1,16 @@
 # Ribcage-SOAP changelog
 
+# 0.0.3
+
+## `#isDeleted()` method
+
+This method will be called whenever an object is `#destroy()`ed and will
+determine if the deletion was successful. A matching `deleted` option can be
+passed to the `destroy()` call.
+
 # 0.0.2
 
-# `#destory()` fix
+## `#destory()` fix
 
 The `#destroy()` method now works correctly (or incorrectly, depending on how
 you look at it), and behaves exactly the same as `#fetch()` except it fires
