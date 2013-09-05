@@ -8,6 +8,18 @@ This method will be called whenever an object is `#destroy()`ed and will
 determine if the deletion was successful. A matching `deleted` option can be
 passed to the `destroy()` call.
 
+## `#soapXTemplateSource` properties
+
+Now it's possible to specify only the template source, and have the mixin take
+care of rendering it with Underscore.
+
+## `#soapGetXParams` methods
+
+For each CRUD method, it is now possible to override the way mixin gets templat
+context data, similarly to the way it's done in Ribcage TemplateView. This is
+especially useful for collections that need to retrieve a set of models based
+on variable parameters.
+
 # 0.0.2
 
 ## `#destory()` fix
