@@ -20,6 +20,14 @@ context data, similarly to the way it's done in Ribcage TemplateView. This is
 especially useful for collections that need to retrieve a set of models based
 on variable parameters.
 
+## `options.extraParams`
+
+The sync method will pass the extraParams to `#soapGetXParams` and the
+default implementation of `#soapGetXParams` methods will override any model
+data using those params. This means that extra parameters can be passed for
+each `#save()`, `#fetch()` or `#destroy()` call separately without hard-wiring
+the definiton in a model or a collection constructor.
+
 # 0.0.2
 
 ## `#destory()` fix
