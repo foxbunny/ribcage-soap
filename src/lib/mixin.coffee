@@ -169,41 +169,41 @@ define (require) ->
   # Source for the Delete template.
   soapDeleteTemplateSource: ''
 
-  # ## `soapGetCreateParams([model])`
+  # ## `soapGetCreateParams([model, params])`
   #
   # Returns the data to be used as template context for the Create method.
   #
   # Default implementation returns model's attributes. You generally want to
   # overload this method when dealing with collections.
-  soapGetCreateParams: (model=null) ->
-    (model or this).toJSON()
+  soapGetCreateParams: (model=null, params=null) ->
+    _.extend {}, (model or this).toJSON(), params
 
-  # ## `soapGetReadParams([model])`
+  # ## `soapGetReadParams([model, params])`
   #
   # Returns the data to be used as template context for the Read method.
   #
   # Default implementation returns model's attributes. You generally want to
   # overload this method when dealing with collections.
-  soapGetReadParams: (model=null) ->
-    (model or this).toJSON()
+  soapGetReadParams: (model=null, params=null) ->
+    _.extend {}, (model or this).toJSON(), params
 
-  # ## `soapGetUpdateParams([model])`
+  # ## `soapGetUpdateParams([model, params])`
   #
   # Returns the data to be used as template context for the Update method.
   #
   # Default implementation returns model's attributes. You generally want to
   # overload this method when dealing with collections.
-  soapGetUpdateParams: (model=null) ->
-    (model or this).toJSON()
+  soapGetUpdateParams: (model=null, params=null) ->
+    _.extend {}, (model or this).toJSON(), params
 
-  # ## `soapGetDeleteParams([model])`
+  # ## `soapGetDeleteParams([model, params])`
   #
   # Returns the data to be used as template context for the Delete method.
   #
   # Default implementation returns model's attributes. You generally want to
   # overload this method when dealing with collections.
-  soapGetDeleteParams: (model=null) ->
-    (model or this).toJSON()
+  soapGetDeleteParams: (model=null, params=null) ->
+    _.extend {}, (model or this).toJSON(), params
 
   # ## `soapCreateTemplate(data)`
   #
@@ -253,7 +253,7 @@ define (require) ->
   # during `#sync()` call.
   soapDeleteTemplate: (data) -> _.template @soapDeleteTemplateSource, data
 
-  # ## `soapCreate(model)`
+  # ## `soapCreate(model, params)`
   #
   # Prepares jquery.soap settings for model's create method. The default
   # implementation calls the `#getSoapCreateMethod()` and
@@ -261,11 +261,11 @@ define (require) ->
   # `params` keys respectively.
   #
   # If the `model` argument is not passed, it will use `this`.
-  soapCreate: (model=null) ->
+  soapCreate: (model=null, params=null) ->
     method: @getSoapCreateMethod()
-    params: @soapCreateTemplate @soapGetCreateParams model
+    params: @soapCreateTemplate @soapGetCreateParams model, params
 
-  # ## `soapRead(model)`
+  # ## `soapRead(model, params)`
   #
   # Prepares jquery.soap settings for model's read method. The default
   # implementation calls the `#getSoapReadMethod()` and
@@ -273,11 +273,11 @@ define (require) ->
   # `params` keys respectively.
   #
   # If the `model` argument is not passed, it will use `this`.
-  soapRead: (model=null) ->
+  soapRead: (model=null, params=null) ->
     method: @getSoapReadMethod()
-    params: @soapReadTemplate @soapGetReadParams model
+    params: @soapReadTemplate @soapGetReadParams model, params
 
-  # ## `soapUpdate(model)`
+  # ## `soapUpdate(model, params)`
   #
   # Prepares jquery.soap settings for model's update method. The default
   # implementation calls the `#getSoapUpdateMethod()` and
@@ -285,11 +285,11 @@ define (require) ->
   # `params` keys respectively.
   #
   # If the `model` argument is not passed, it will use `this`.
-  soapUpdate: (model=null) ->
+  soapUpdate: (model=null, params=null) ->
     method: @getSoapUpdateMethod()
-    params: @soapUpdateTemplate @soapGetUpdateParams model
+    params: @soapUpdateTemplate @soapGetUpdateParams model, params
 
-  # ## `soapDelete(model)`
+  # ## `soapDelete(model, params)`
   #
   # Prepares jquery.soap settings for model's delete method. The default
   # implementation calls the `#getSoapDeleteMethod()` and
@@ -297,9 +297,9 @@ define (require) ->
   # `params` keys respectively.
   #
   # If the `model` argument is not passed, it will use `this`.
-  soapDelete: (model=null) ->
+  soapDelete: (model=null, params=null) ->
     method: @getSoapDeleteMethod()
-    params: @soapDeleteTemplate @soapGetDeleteParams model
+    params: @soapDeleteTemplate @soapGetDeleteParams model, params
 
   # ## `getUrl(method, action)`
   #
@@ -338,7 +338,8 @@ define (require) ->
     fn = this["soap#{capMethod}"]
 
     # Prepare parameters by calling the request handler
-    params = fn.call this, model # use .call since it's a dangling method
+    # use .call since it's a dangling method
+    params = fn.call this, model, options.extraParams
 
     # Send out the request using jquery.soap
     $.soap _.extend params, options, {
