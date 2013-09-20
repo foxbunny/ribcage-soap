@@ -19,6 +19,7 @@
 #
 # This module is in UMD format and creates `ribcageSoap.mixin` global if
 # not used with an AMD loader such as RequireJS.
+#
 
 if typeof define isnt 'function' or not define.amd
   @require = (dep) =>
@@ -35,11 +36,15 @@ if typeof define isnt 'function' or not define.amd
 
 # This module depends on jQuery, Underscore, and jQuery.soap and
 # jQuery.xml2json plugins.
+#
 define (require) ->
   $ = require 'jquery'
   _ = require 'underscore'
   require 'jquery.soap'
   require 'jquery.xml2json'
+
+  # ::TOC::
+  #
 
   # ## `baseUrl`
   #
@@ -48,6 +53,7 @@ define (require) ->
   # prototype to have to changed globally for all your SOAP models.
   #
   # By default, it's 'http://example.com'.
+  #
   baseUrl: 'http://example.com'
 
   # ## `namespace`
@@ -56,6 +62,7 @@ define (require) ->
   # you can change this on the model's prototype if needed.
   #
   # By default, it's 'http://example.com'.
+  #
   namespace: 'http://example.com'
 
   # ## `debug`
@@ -64,6 +71,7 @@ define (require) ->
   # as is.
   #
   # Default is `false`.
+  #
   debug: false
 
   # ## `appendMethod`
@@ -72,6 +80,7 @@ define (require) ->
   # to the base URL. This value is relayed to jquery.soap as is.
   #
   # Default is `false`.
+  #
   appendMethod: false
 
   # ## `soap12`
@@ -79,6 +88,7 @@ define (require) ->
   # Whether to use SOAP v1.2. This setting is relayed to jquery.soap as is.
   #
   # Default is `false`.
+  #
   soap12: false
 
   # ## `soapCreateMethod`
@@ -87,6 +97,7 @@ define (require) ->
   # method.
   #
   # By default, it's 'Create'.
+  #
   soapCreateMethod: 'Create'
 
   # ## `soapReadMethod`
@@ -95,6 +106,7 @@ define (require) ->
   # method.
   #
   # By default, it's 'Read'
+  #
   soapReadMethod: 'Read'
 
   # ## `soapUpdateMethod`
@@ -103,6 +115,7 @@ define (require) ->
   # method.
   #
   # By default, it's 'Update'
+  #
   soapUpdateMethod: 'Update'
 
   # ## `soapDeleteMethod`
@@ -111,6 +124,7 @@ define (require) ->
   # method.
   #
   # By default, it's 'Delete'
+  #
   soapDeleteMethod: 'Delete'
 
   # ## `getSoapCreateMethod()`
@@ -119,6 +133,7 @@ define (require) ->
   # method.
   #
   # Overload if you wish to set the method name at runtime
+  #
   getSoapCreateMethod: () ->
     @soapCreateMethod
 
@@ -128,6 +143,7 @@ define (require) ->
   # method.
   #
   # Overload if you wish to set the method name at runtime
+  #
   getSoapReadMethod: () ->
     @soapReadMethod
 
@@ -137,6 +153,7 @@ define (require) ->
   # method.
   #
   # Overload if you wish to set the method name at runtime
+  #
   getSoapUpdateMethod: () ->
     @soapUpdateMethod
 
@@ -146,27 +163,32 @@ define (require) ->
   # method.
   #
   # Overload if you wish to set the method name at runtime
+  #
   getSoapDeleteMethod: () ->
     @soapDeleteMethod
 
   # ## `soapCreateTemplateSource`
   #
   # Source for the Create template.
+  #
   soapCreateTemplateSource: ''
 
   # ## `soapReadTemplateSource`
   #
   # Source for the Read template.
+  #
   soapReadTemplateSource: ''
 
   # ## `soapUpdateTemplateSource`
   #
   # Source for the Update template.
+  #
   soapUpdateTemplateSource: ''
 
   # ## `soapDeleteTemplateSource`
   #
   # Source for the Delete template.
+  #
   soapDeleteTemplateSource: ''
 
   # ## `soapGetCreateParams([model, params])`
@@ -175,6 +197,7 @@ define (require) ->
   #
   # Default implementation returns model's attributes. You generally want to
   # overload this method when dealing with collections.
+  #
   soapGetCreateParams: (model=null, params=null) ->
     _.extend {}, (model or this).toJSON(), params
 
@@ -184,6 +207,7 @@ define (require) ->
   #
   # Default implementation returns model's attributes. You generally want to
   # overload this method when dealing with collections.
+  #
   soapGetReadParams: (model=null, params=null) ->
     _.extend {}, (model or this).toJSON(), params
 
@@ -193,6 +217,7 @@ define (require) ->
   #
   # Default implementation returns model's attributes. You generally want to
   # overload this method when dealing with collections.
+  #
   soapGetUpdateParams: (model=null, params=null) ->
     _.extend {}, (model or this).toJSON(), params
 
@@ -202,6 +227,7 @@ define (require) ->
   #
   # Default implementation returns model's attributes. You generally want to
   # overload this method when dealing with collections.
+  #
   soapGetDeleteParams: (model=null, params=null) ->
     _.extend {}, (model or this).toJSON(), params
 
@@ -214,6 +240,7 @@ define (require) ->
   # `param` argument in the jquery.soap call.
   #
   # By default, this property renders a template in the matching property.
+  #
   soapCreateTemplate: (data) -> _.template @soapCreateTemplateSource, data
 
 
@@ -227,6 +254,7 @@ define (require) ->
   #
   # By default, this property is `null`, and that will trigger an exception
   # during `#sync()` call.
+  #
   soapReadTemplate: (data) -> _.template @soapReadTemplateSource, data
 
   # ## `soapUpdateTemplate(data)`
@@ -239,6 +267,7 @@ define (require) ->
   #
   # By default, this property is `null`, and that will trigger an exception
   # during `#sync()` call.
+  #
   soapUpdateTemplate: (data) -> _.template @soapUpdateTemplateSource, data
 
   # ## `soapDeleteTemplate(data)`
@@ -331,17 +360,17 @@ define (require) ->
     # Capitalized method name
     capMethod = "#{method[0].toUpperCase()}#{method.slice 1}"
 
-    # Add the method to options so it can be relayed to `#parse()`
+    ## Add the method to options so it can be relayed to `#parse()`
     options.crudMethod = capMethod
 
-    # Alias the method
+    ## Alias the method
     fn = this["soap#{capMethod}"]
 
-    # Prepare parameters by calling the request handler
-    # use .call since it's a dangling method
+    ## Prepare parameters by calling the request handler
+    ## use .call since it's a dangling method
     params = fn.call this, model, options.extraParams
 
-    # Send out the request using jquery.soap
+    ## Send out the request using jquery.soap
     $.soap _.extend params, options, {
       enableLogging: @debug
       url: @getUrl(method, params.method)
@@ -351,44 +380,56 @@ define (require) ->
       soap12: @soap12
     }
 
-  # ## `convertCreateResponse(json)`
+  # ## `convertCreateResponse(json, options)`
   #
   # Process the response JSON data and return an object. The return value is
   # returned untouched by the `#parse()` method.
   #
+  # `options` object is the same object originally passed to `#sync`.
+  #
   # Default implementation simply throws an exception. You must override this
   # method, or `#convertResponse()`, or `#parse()` method.
-  convertCreateResponse: (json) ->
+  #
+  convertCreateResponse: (json, options) ->
     throw new Error 'convertCreateResponse method is not implemented'
 
-  # ## `convertReadResponse(json)`
+  # ## `convertReadResponse(json, options)`
   #
   # Process the response JSON data and return an object. The return value is
   # returned untouched by the `#parse()` method.
   #
+  # `options` object is the same object originally passed to `#sync`.
+  #
   # Default implementation simply throws an exception. You must override this
   # method, or `#convertResponse()`, or `#parse()` method.
-  convertReadResponse: (json) ->
+  #
+  convertReadResponse: (json, options) ->
     throw new Error 'convertReadResponse method is not implemented'
 
-  # ## `convertUpdateResponse(json)`
+  # ## `convertUpdateResponse(json, options)`
   #
   # Process the response JSON data and return an object. The return value is
   # returned untouched by the `#parse()` method.
   #
+  # `options` object is the same object originally passed to `#sync`.
+  #
   # Default implementation simply throws an exception. You must override this
   # method, or `#convertResponse()`, or `#parse()` method.
-  convertUpdateResponse: (json) ->
+  #
+  convertUpdateResponse: (json, options) ->
     throw new Error 'convertUpdateResponse method is not implemented'
 
-  # ## `convertDeleteResponse(json)`
+  # ## `convertDeleteResponse(json, options)`
   #
   # Process the response JSON data and return an object. The return value is
   # returned untouched by the `#parse()` method.
   #
+  # `options` object is the same object originally passed to `#sync`.
+  #
   # Default implementation simply throws an exception. You must override this
   # method, or `#convertResponse()`, or `#parse()` method.
-  convertDeleteResponse: (json) ->
+  #
+  convertDeleteResponse: (json, options) ->
     throw new Error 'convertDeleteResponse method is not implemented'
 
   # ## `isDeleted(model)`
@@ -406,6 +447,7 @@ define (require) ->
   #
   # Returning `false` from this method will prevent the triggering of 'destroy'
   # event on the model, and will cause the success callback to not be called.
+  #
   isDeleted: (model) ->
     return true
 
@@ -422,8 +464,9 @@ define (require) ->
   #
   # By default, this method will delegate to one of the `#convertXResponse()`
   # methods depending on the CRUD method.
+  #
   convertResponse: (json, options) ->
-    this["convert#{options.crudMethod}Response"](json)
+    this["convert#{options.crudMethod}Response"] json, options
 
   # ## `parse(response, options)`
   #
@@ -431,26 +474,28 @@ define (require) ->
   # pass its `Body` property to the `#convertResponse()` method. You you want
   # to change the way response is converted to an object, you should override
   # this method.
+  #
   parse: (response, options) ->
     @convertResponse response.toJSON().Body, options
 
   # ## `destroy([options])`
   #
   # Rewires `#destroy()` call to behave more like `#fetch()`.
+  #
   destroy: (options={}) ->
     options = _.clone options  # shallow copy
     options.parse or= true
 
     options.deleted or= @isDeleted
 
-    # Wrap the success callback
+    ## Wrap the success callback
     success = options.success
     options.success = (resp) =>
       return false if not options.deleted @set @parse(resp, options), options
       success(this, resp, options) if success
       this.trigger 'destroy', this, @collection, options
 
-    # Wrap the error callback
+    ## Wrap the error callback
     error = options.error
     options.error = (resp) =>
       error(this, resp, options) if error
