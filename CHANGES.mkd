@@ -1,5 +1,13 @@
 # Ribcage-SOAP changelog
 
+# 0.0.4
+
+## The `options` object is relayed to conversion methods
+
+In the past only `convertResponse` would receive the `options` object. Now, all
+final conversion functions for each SOAP method will also receive the `options`
+object.
+
 # 0.0.3
 
 ## `#isDeleted()` method
